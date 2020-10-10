@@ -41,6 +41,7 @@
             text-align: center;
             border-radius: 5px;
             box-shadow: 1px 1px 2px #000;
+            cursor:default;
         }
         .btn:hover{
             background:#ddd;
@@ -54,7 +55,7 @@
     <div class="container">
         <textarea name="userinput" id="input" cols="30" rows="10" placeholder="say something!"></textarea>
         <div class="output"></div>
-        <div class="btn">Translate</div>
+        <div class="btn">TranslateTo</div>
     </div>
     
     <script>
@@ -71,10 +72,11 @@
 
             //now show output
             let unparsed = await fetch('./translate.json');
+            //console.log(await unparsed);
             const outputData = await unparsed.json();
-            console.log(await outputData);
+            //console.log(await outputData);
             if (Object.keys(outputData).indexOf('mandarin')>=0){
-                output.innerHTML=outputData.mandarin+'<br>'+outputData.pinyin;
+                output.innerHTML=outputData.mandarin+'<br><br>'+outputData.pinyin;
             }
             
         }

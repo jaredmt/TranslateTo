@@ -18,7 +18,8 @@ async function scrape(msg="hello"){
     let page = await browser.newPage();
     //URL+=textarea.innerText;
     console.log(msg);
-    URL+=msg;
+    URL+=encodeURIComponent(msg);
+    console.log(URL);
 
     await page.goto(URL,{waitUntil:'networkidle2'});
     /*networkidle2 waits until there are no more than 2 network connections for
@@ -26,8 +27,9 @@ async function scrape(msg="hello"){
 
     //translate to chinese characters
     let result = await page.evaluate(()=>{
-        return {mandarin: document.querySelector('.result-shield-container span span').innerText,
+        return {mandarin: document.querySelector('.result-shield-container span').innerHTML,
                 pinyin: document.querySelector('.tlid-result-transliteration-container .tlid-transliteration-content').innerText
+                .split('\n').join('<br>')
         };
     });
 
