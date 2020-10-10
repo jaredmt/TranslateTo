@@ -72,20 +72,41 @@
 
             //now show output
             let unparsed = await fetch('./translate.json');
-            //console.log(await unparsed);
-            const outputData = await unparsed.json();
-            //console.log(await outputData);
+            const outputData = await unparsed.json().catch(async err=>{
+                console.log("err occurred while trying to translate: ",err);
+
+                //try again. the error only occurs if the translation hasn't been recorded yet
+                window.location.href=document.URL;
+                await pending();
+                return;
+            });
+            
             if (Object.keys(outputData).indexOf('mandarin')>=0){
+                //update output
                 output.innerHTML=outputData.mandarin+'<br><br>'+outputData.pinyin;
             }
             
+        }
+
+
+        /**
+         * this function shows a message to let the user know that something is happening
+         * */
+        async function pending(){
+            const pendingWords = ['Thinking','Searching','The translation to that is','Please be patient']
+            const pendingWord = pendingWords[Math.floor( Math.random()*pendingWords.length)];
+            output.innerText = pendingWord+"...";
+            setInterval(async ()=>{
+                output.innerText+='.';
+            },500);
         }
 
         
         async function getTranslation(e){
             const inputValue = encodeURIComponent(input.value);
             const newURL = document.URL.split('?')[0]+'?input='+inputValue;
-            console.log(newURL);
+            //console.log('going to new url: ',newURL);
+            await pending();
             window.location.href=newURL;
             
         }
