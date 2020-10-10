@@ -74,7 +74,7 @@
             const outputData = await unparsed.json();
             console.log(await outputData);
             if (Object.keys(outputData).indexOf('mandarin')>=0){
-                output.innerText=outputData.mandarin;
+                output.innerHTML=outputData.mandarin+'<br>'+outputData.pinyin;
             }
             
         }
