@@ -63,14 +63,20 @@
         async function showOutput(){
 
             //this function only runs on DOMContentLoaded
-            //first show the input (taken from URL)
 
+            //first show the input (taken from URL)
+            let searchParam = new URLSearchParams(window.location.search);
+            const inputText = searchParam.get('input');
+            input.value=inputText;
 
             //now show output
             let unparsed = await fetch('./translate.json');
             const outputData = await unparsed.json();
             console.log(await outputData);
-            output.innerText=outputData.mandarin;
+            if (Object.keys(outputData).indexOf('mandarin')>=0){
+                output.innerText=outputData.mandarin;
+            }
+            
         }
 
         

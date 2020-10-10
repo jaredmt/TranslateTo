@@ -2,6 +2,7 @@ const puppeteer = require('puppeteer');
 const http = require('http');//change to https later
 const fs = require('fs');
 const path = require('path');
+const url = require('url');
 const { hostname } = require('os');
 
 var PORT = process.env.PORT || 3000;
@@ -41,7 +42,11 @@ async function scrape(msg="hello"){
 
 
 let server = http.createServer(async (req,resp)=>{
-    var URL = req.url;
+    var URL = req.url.split('?')[0];
+    let inputValue=url.parse(req.url,true).query;
+    inputValueGiven=Object.keys(inputValue).indexOf('input')>=0;
+    inputValue = inputValueGiven?inputValue['input']:"";
+    
     let filepath = path.join(__dirname,URL=='/'?'index.html':URL);
     let extname = path.extname(filepath);
 
@@ -72,7 +77,10 @@ let server = http.createServer(async (req,resp)=>{
     }
     
     await resp.writeHead(200,{'Content-Type':contentType});
-    var result = await scrape();//message goes here!
+    var result="";
+    if (inputValueGiven){
+        result = await scrape(inputValue);//message goes here!
+    }
     await fs.writeFile('./translate.json',JSON.stringify(result),err=>console.log(err));
     //await resp.write([result.msg,result.pinyin,result.mandarin].join(", "));
     await fs.readFile(filepath,'utf8',(err,data)=>{
