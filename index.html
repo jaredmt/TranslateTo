@@ -61,6 +61,7 @@
     <script>
         const output = document.querySelector('.output');
         const input = document.querySelector('#input');
+        const button = document.querySelector('.btn');
         async function showOutput(){
 
             //this function only runs on DOMContentLoaded
@@ -101,9 +102,15 @@
             },500);
         }
 
-        
+        /**
+         * this funciton will retrieve the translation by simply adding the user input to
+         * the URL query
+         * */
         async function getTranslation(e){
             const inputValue = encodeURIComponent(input.value);
+            if (inputValue==''){
+                return;//don't send a request if there's no input to be translated
+            }
             const newURL = document.URL.split('?')[0]+'?input='+inputValue;
             //console.log('going to new url: ',newURL);
             await pending();
@@ -111,9 +118,26 @@
             
         }
 
+        /**
+         * this gives the user the option to clear inputs as well as the URL query
+         * */
+        function clearInputs(){
+            input.value='';//clear input
+            output.innerHTML='';//clear output
+            window.location.href=document.URL.split('?')[0];//not sure why this doesn't work
+        }
+
         //event listeners
         document.addEventListener('DOMContentLoaded',showOutput);
-        document.querySelector('.btn').addEventListener('click',getTranslation);
+        button.addEventListener('click',getTranslation);
+        document.addEventListener('keydown', e=>{
+            if (e.key=='Escape'){
+                console.log('user hit escape key');
+                clearInputs();
+                return clearInputs;
+            }
+        });
+        
 
     </script>
 </body>
