@@ -42,15 +42,40 @@ async function scrape(msg="hello"){
 
 let server = http.createServer(async (req,resp)=>{
     var URL = req.url;
+    let filepath = path.join(__dirname,URL=='/'?'index.html':URL);
+    let extname = path.extname(filepath);
 
+    //initial content type
+    let contentType = 'text/html; charset=UTF-8';
 
+    //check ext and set content type
+    switch(extname){
+        case '.js':
+            contentType='text/javascript';
+            break;
+        case '.css':
+            contentType='text/css';
+            break;
+        case '.json':
+            contentType='application/json';
+            break;
+        case '.png':
+            contentType='image/png';
+            break;
+        case '.jpg':
+            contentType='image/jpg';
+            break;
+    }
 
+    if (extname=='.ico'){
+        return;//ignore icons for now
+    }
     
-    await resp.writeHead(200,{'Content-Type':'text/html; charset=UTF-8'});
-    var result = await scrape("hello");
+    await resp.writeHead(200,{'Content-Type':contentType});
+    var result = await scrape();//message goes here!
     await fs.writeFile('./translate.json',JSON.stringify(result),err=>console.log(err));
     //await resp.write([result.msg,result.pinyin,result.mandarin].join(", "));
-    await fs.readFile(path.join(__dirname,'index.html'),'utf8',(err,data)=>{
+    await fs.readFile(filepath,'utf8',(err,data)=>{
         if(err){
             console.log(err);
             return "error";

@@ -27,9 +27,26 @@
             margin: 10px;
             padding: 10px;
             width: 90%;
+            min-height: 30px;
             text-align: center;
+            border-radius: 3px;
             /* border: 2px solid #ddd; */
         }
+
+        .btn{
+            width:90%;
+            margin: 10px;
+            padding: 10px;
+            background: #ccc;
+            text-align: center;
+            border-radius: 5px;
+            box-shadow: 1px 1px 2px #000;
+        }
+        .btn:hover{
+            background:#ddd;
+        }
+
+
     </style>
     <title>TranslateTo</title>
 </head>
@@ -37,18 +54,38 @@
     <div class="container">
         <textarea name="userinput" id="input" cols="30" rows="10" placeholder="say something!"></textarea>
         <div class="output"></div>
+        <div class="btn">Translate</div>
     </div>
     
     <script>
         const output = document.querySelector('.output');
+        const input = document.querySelector('#input');
         async function showOutput(){
-            const outputData = await (await fetch('./translate.json')
-            .then(resp=>resp.text())
-            .then(text=>console.log(text))
-            .catch(err=>console.log(err))).json();
+
+            //this function only runs on DOMContentLoaded
+            //first show the input (taken from URL)
+
+
+            //now show output
+            let unparsed = await fetch('./translate.json');
+            const outputData = await unparsed.json();
+            console.log(await outputData);
             output.innerText=outputData.mandarin;
         }
-        showOutput();
+
+        
+        async function getTranslation(e){
+            const inputValue = encodeURIComponent(input.value);
+            const newURL = document.URL.split('?')[0]+'?input='+inputValue;
+            console.log(newURL);
+            window.location.href=newURL;
+            
+        }
+
+        //event listeners
+        document.addEventListener('DOMContentLoaded',showOutput);
+        document.querySelector('.btn').addEventListener('click',getTranslation);
+
     </script>
 </body>
 </html>
