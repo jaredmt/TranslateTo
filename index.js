@@ -50,7 +50,7 @@ async function scrape(msg="hello"){
 
 
 /**
- * create the server
+ * create the server.
  */
 let server = http.createServer(async (req,resp)=>{
     var URL = req.url.split('?')[0];//get url not including query
