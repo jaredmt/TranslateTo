@@ -19,7 +19,12 @@ var HOST = hostname();
  */
 async function scrape(msg="hello"){
     var URL = 'https://translate.google.com/#view=home&op=translate&sl=en&tl=zh-CN&text=';
-    let browser = await puppeteer.launch({'headless':true});
+    let browser = await puppeteer.launch({
+        'headless':true,
+        args:[
+            '--no-sandbox',
+            '--disable-setuid-sandbox'
+    ]});
     let page = await browser.newPage();
     URL+=encodeURIComponent(msg);//add message to the URL to be scraped
 
@@ -82,6 +87,7 @@ let server = http.createServer(async (req,resp)=>{
     }
 
     if (extname=='.ico'){
+        resp.end();
         return;//ignore icons for now
     }
     
