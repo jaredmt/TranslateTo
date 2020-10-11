@@ -1,5 +1,5 @@
 const puppeteer = require('puppeteer');
-const http = require('https');//change to https later
+const http = require('http');//change to https later
 const fs = require('fs');
 const path = require('path');
 const url = require('url');
