@@ -4,7 +4,7 @@ This translates your text input to another language. For now it only translates 
 
 ## Demo
 
-The live demo of this project can be viewed [here](https://jaredmt.github.io/TranslateTo/).
+The live demo of this project will be available soon.
 
 ## Purpose of this project
 
