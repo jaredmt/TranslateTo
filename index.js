@@ -34,10 +34,16 @@ async function scrape(msg="hello"){
 
     //translate to chinese characters and pinyin
     let result = await page.evaluate(()=>{
-        return {mandarin: document.querySelector('.result-shield-container span').innerHTML,
-                pinyin: document.querySelector('.tlid-result-transliteration-container .tlid-transliteration-content').innerText
-                .split('\n').join('<br>')
-        };
+        try {
+            return {mandarin: document.querySelector('.J0lOec span1').innerText,
+                pinyin: document.querySelectorAll('.kO6q6e')[1].innerText
+            };
+        }catch(e){
+            return {mandarin: 'Issue finding translation. Most likely this project needs to update to match google translate',
+            pinyin: "Error message: "+e.message}
+
+        }
+        
     });
 
     await browser.close();//close headless browser
@@ -119,4 +125,5 @@ let server = http.createServer(async (req,resp)=>{
 
 
 
-server.listen(PORT);
+server.listen(PORT)
+console.log(`GO TO http://localhost:${PORT}/`)
